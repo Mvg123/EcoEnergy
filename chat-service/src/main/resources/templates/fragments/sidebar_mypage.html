@@ -6,10 +6,12 @@
     <ul>
 <!--    <li th:classappend="${activePage == 'dashboard'} ? 'active'"><a th:href="@{/seller/mypage}">📊 대시보드</a></li>-->
         <li th:classappend="${activePage == 'profile'} ? 'active'">
-            <a th:href="@{/seller/profile}">🏢 기업 정보</a>
+            <a th:if="${userRole == 'SELLER'}" th:href="@{/seller/profile}">🏢 기업 정보</a>
+            <a th:if="${userRole == 'BUYER'}" th:href="@{/buyer/profile}">🏢 기업 정보</a>
         </li>
         <li th:classappend="${activePage == 'sellerpost'} ? 'active'">
-            <a th:href="@{/seller/sellerpost}">📢 판매글 관리</a>
+            <a th:if="${userRole == 'SELLER'}" th:href="@{/seller/sellerpost}">📢 판매글 관리</a>
+            <a th:if="${userRole == 'BUYER'}" th:href="@{/buyer/sellerpost}">📢 판매글 관리</a>
         </li>
         <li th:classappend="${activePage == 'request'} ? 'active'">
             <a href="/inquiry/view/received">📩 받은 구매 요청</a>
@@ -18,7 +20,9 @@
             <a href="/inquiry/view/sent">📤 보낸 문의 (나의 질문)</a>
         </li>
         <li th:classappend="${activePage == 'password'} ? 'active'">
-            <a th:href="@{/seller/passwordUpdate}">🔒 비밀번호 수정</a>
+            <a th:if="${userRole == 'SELLER'}" th:href="@{/seller/passwordUpdate}">🔒 비밀번호 수정</a>
+
+            <a th:if="${userRole == 'BUYER'}" th:href="@{/buyer/passwordUpdate}">🔒 비밀번호 수정</a>
         </li>
     </ul>
 </aside>

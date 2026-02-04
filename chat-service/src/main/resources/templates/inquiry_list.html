@@ -119,8 +119,8 @@
                         <div style="display: flex; gap: 15px; align-items: center;">
                             <span style="font-weight: 500;" th:text="${#temporals.format(item.createdDate, 'yyyy-MM-dd HH:mm')}">2026-01-27</span>
                             <span style="color: #cbd5e1;">|</span>
-                            <span th:if="${pageType == 'received'}">👤 질문자: <strong style="color: #334155;" th:text="${item.inquirerName}">user1</strong></span>
-                            <span th:if="${pageType == 'sent'}">👤 수신자: <strong style="color: #334155;" th:text="${item.recipientId}">seller1</strong></span>
+                            <span th:if="${pageType == 'received'}">👤 질문자: <strong style="color: #334155;" th:text="${item.inquirerName}">user</strong></span>
+                            <span th:if="${pageType == 'sent'}">👤 수신자: <strong style="color: #334155;" th:text="${item.inquirerName}">user</strong></span>
                             <span style="color: #cbd5e1;">|</span>
                             <span>📄 게시글 제목: <span th:text="${item.postTitle}">10</span></span>
                         </div>

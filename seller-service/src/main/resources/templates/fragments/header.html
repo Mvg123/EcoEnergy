@@ -6,7 +6,10 @@
     <nav>
         <ul>
             <li><a th:href="@{/market/marketpost}" th:classappend="${activeMenu == 'market'} ? 'active'">게시판 (거래소)</a></li>
-            <li><a th:href="@{/seller/profile}" th:classappend="${activeMenu == 'profile'} ? 'active'">마이페이지</a></li>
+            <li th:classappend="${activeMenu == 'profile'} ? 'active'">
+                <a th:if="${userRole == 'SELLER'}" th:href="@{/seller/profile}">마이페이지</a>
+                <a th:if="${userRole == 'BUYER'}" th:href="@{/buyer/profile}">마이페이지</a>
+            </li>
         </ul>
     </nav>
     <div style="color: #94a3b8; font-size: 0.9rem;">

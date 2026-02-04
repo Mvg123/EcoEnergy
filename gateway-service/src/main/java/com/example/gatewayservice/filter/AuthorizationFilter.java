@@ -71,6 +71,12 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
                     return onError(exchange, "Access denied", HttpStatus.FORBIDDEN);
                 }
 
+                // /buyer 경로는 "BUYER" 권한만 통과
+                if (path.startsWith("/buyer") && !"BUYER".equals(role)) {
+                    log.warn("⛔ 권한 없음 (BUYER 전용): 사용자({})의 역할({})로는 접근 불가", userId, role);
+                    return onError(exchange, "Access denied", HttpStatus.FORBIDDEN);
+                }
+
                 // 하위 서비스로 정보 전달
                 ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
                         .header("X-USER-ID", userId)

@@ -140,6 +140,9 @@ public class MarketPostService {
             throw new IllegalArgumentException("삭제 권한이 없습니다.");
         }
 
+        postFileRepository.findById(postId).ifPresent(file -> {
+            file.delete(); // 파일 엔티티의 delete 메서드 호출 (delYn = "Y")
+        });
         post.delete();
     }
 
