@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>구매글 관리 - 구매자 센터</title>
+    <link rel="stylesheet" th:href="@{/buyer/css/style.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header('profile')}"></header>
+
+<div class="page-container">
+    <aside th:replace="~{fragments/sidebar_mypage :: sidebar('buyerpost')}"></aside>
+
+    <main class="main-content">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px;">
+            <div class="header" style="margin-bottom: 0;">
+                <h1>📢 구매 희망 게시글 관리</h1>
+                <p>등록한 구매 희망 조건을 수정하거나 마감 상태를 변경할 수 있습니다.</p>
+            </div>
+            <a th:href="@{/market/buyer/write}" class="btn-primary" style="text-decoration: none;">+ 새 구매글 등록</a>
+        </div>
+
+        <div class="card">
+            <table>
+                <colgroup>
+                    <col>
+                    <col style="width: 120px;">
+                    <col style="width: 100px;">
+                    <col style="width: 140px;">
+                    <col style="width: 250px;">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>에너지원</th>
+                    <th>상태</th>
+                    <th>희망 가격</th>
+                    <th>관리</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="post : ${posts}">
+                    <td style="text-align: left; padding-left: 20px; font-weight: 600;">
+                        <a th:href="@{/market/buyer/post/{id}(id=${post.id})}"
+                           style="color: inherit; text-decoration: none;" th:text="${post.title}">제목</a>
+                    </td>
+
+                    <td>
+                        <span class="badge" style="background: #f1f5f9; color: var(--text-dark);" th:text="${post.energyType}">태양광</span>
+                    </td>
+
+                    <td>
+                        <span class="badge"
+                              th:classappend="${post.status == '판매중'} ? 'status-1' : 'status-2'"
+                              th:text="${post.status}">판매중</span>
+                    </td>
+
+                    <td th:text="${post.priceKrw != null ? #numbers.formatInteger(post.priceKrw, 0, 'COMMA') + '원' : '가격협의'}"
+                        style="font-weight: bold; color: #333;"></td>
+
+                    <td>
+                        <button type="button" class="btn-action btn-end"
+                                th:if="${post.status == '판매중'}"
+                                th:onclick="'updateStatus(' + ${post.id} + ', \'N\')'">종료</button>
+
+                        <button type="button" class="btn-action btn-resume"
+                                th:unless="${post.status == '판매중'}"
+                                th:onclick="'updateStatus(' + ${post.id} + ', \'Y\')'">재개</button>
+
+                        <button type="button" class="btn-action btn-edit"
+                                th:onclick="|location.href='@{/market/buyer/edit/{id}(id=${post.id})}'|">수정</button>
+
+                        <button type="button" class="btn-action btn-del"
+                                th:onclick="'deletePost(' + ${post.id} + ')'">삭제</button>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(posts)}">
+                    <td colspan="5" style="text-align: center; padding: 60px; color: var(--text-light);">
+                        등록된 구매 희망글이 없습니다.<br>
+                        우측 상단 '새 구매글 등록' 버튼을 눌러 조건을 등록해보세요!
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/buyer/js/buyerpost.js}"></script>
+</body>
+</html>

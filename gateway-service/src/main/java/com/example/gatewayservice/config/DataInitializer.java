@@ -84,6 +84,50 @@ public class DataInitializer implements CommandLineRunner {
             user2.setApprovYn("Y"); // 테스트용으로 승인
             user2.setMarketingCheck("Y");
             userRepository.save(user2);
+
+            // USER3 (SELLER)
+            String salt3 = Sha512Util.generateSalt();
+            User user3 = new User();
+            user3.setSellComName("유저3회사");
+            user3.setSellRegNum("0000000003");
+            user3.setSellRepName("유저3");
+            user3.setSellComBirth("19990101");
+            user3.setSellComAdr("서울시");
+            user3.setSellComNum("010-3333-4444");
+            user3.setSellBmName("유저3회사담당인");
+            user3.setSellBmNum("010-3333-4443");
+            user3.setSellBmDep("영업팀");
+            user3.setSellComId("user3");
+            user3.setSalt(salt3);
+            user3.setSellComPw(Sha512Util.hash("user123", salt3));
+            user3.setSellComEmail("user3@example.com");
+            user3.setRole("USER");
+            user3.setCompanyType(CompanyType.SELLER); // 판매자 설정
+            user3.setApprovYn("Y");
+            user3.setMarketingCheck("Y");
+            userRepository.save(user3);
+
+// USER4 (BUYER)
+            String salt4 = Sha512Util.generateSalt();
+            User user4 = new User();
+            user4.setSellComName("유저4회사");
+            user4.setSellRegNum("0000000004");
+            user4.setSellRepName("유저4");
+            user4.setSellComBirth("19950505");
+            user4.setSellComAdr("부산시");
+            user4.setSellComNum("010-4444-5555");
+            user4.setSellBmName("유저4회사담당인");
+            user4.setSellBmNum("010-4444-5554");
+            user4.setSellBmDep("구매팀");
+            user4.setSellComId("user4");
+            user4.setSalt(salt4);
+            user4.setSellComPw(Sha512Util.hash("user123", salt4));
+            user4.setSellComEmail("user4@example.com");
+            user4.setRole("USER");
+            user4.setCompanyType(CompanyType.BUYER); // 구매자 설정
+            user4.setApprovYn("Y");
+            user4.setMarketingCheck("Y");
+            userRepository.save(user4);
         }
     }
 }

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>매물 등록 - 대항에너지</title>
+    <link rel="stylesheet" th:href="@{/market/css/style.css}">
+    <style>
+        .section-title { font-size: 1.1rem; font-weight: bold; margin: 30px 0 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; color: #333; }
+        .form-row { display: flex; margin-bottom: 20px; align-items: flex-start; }
+        .form-label { width: 180px; font-weight: bold; color: #444; padding-top: 10px; flex-shrink: 0; position: relative; }
+        .form-input-box { flex: 1; }
+
+        .radio-group { display: flex; gap: 20px; flex-wrap: wrap; padding-top: 10px; }
+        .radio-group label { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        .radio-group input[type="radio"], .radio-group input[type="checkbox"] { transform: scale(1.2); accent-color: #2fb44a; }
+
+        .input-group { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .form-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; }
+        .form-input:focus { border-color: #2fb44a; outline: none; }
+
+        .form-input[readonly] { background-color: #f5f5f5; color: #888; cursor: default; }
+
+        .unit-text { color: #666; font-weight: bold; min-width: 60px; }
+        .helper-text { font-size: 0.85rem; color: #888; margin-top: 5px; }
+
+        .btn-green { background-color: #2fb44a; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-green:hover { background-color: #26963d; }
+
+        .tooltip-icon {
+            display: inline-block; width: 18px; height: 18px; background: #eee; color: #666; border-radius: 50%;
+            text-align: center; line-height: 18px; font-size: 12px; cursor: help; margin-left: 5px;
+        }
+        .tooltip-content {
+            visibility: hidden; width: 320px; background-color: #f9f9f9; color: #333; text-align: left;
+            border: 1px solid #ddd; padding: 10px; border-radius: 6px; position: absolute; z-index: 1;
+            bottom: 120%; left: 50%; margin-left: -60px; opacity: 0; transition: opacity 0.3s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); font-weight: normal; font-size: 0.85rem; line-height: 1.4;
+        }
+        .tooltip-icon:hover .tooltip-content { visibility: visible; opacity: 1; }
+        .tooltip-content::after {
+            content: ""; position: absolute; top: 100%; left: 20px; margin-left: -5px;
+            border-width: 5px; border-style: solid; border-color: #ddd transparent transparent transparent;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header('market')}"></div>
+
+<div class="page-container">
+    <div th:replace="~{fragments/sidebar_market :: sidebar('all')}"></div>
+
+    <main class="main-content">
+        <div class="header">
+            <h1>📝 새 매물 등록</h1>
+            <p>보유하신 발전소 정보를 정확하게 입력해 주세요.</p>
+        </div>
+
+        <div class="card">
+            <form th:action="@{/market/write}" method="post" enctype="multipart/form-data" onsubmit="return prepareFormData()">
+
+                <div class="section-title">기본 정보</div>
+                <div class="form-row">
+                    <label class="form-label">게시글 제목 <span style="color:red">*</span></label>
+                    <div class="form-input-box">
+                        <input type="text" name="title" class="form-input" required placeholder="예: 전남 해남 100kW 태양광 발전소 매매합니다">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">발전원 <span style="color:red">*</span></label>
+                    <div class="form-input-box radio-group">
+                        <label><input type="radio" name="energyType" value="태양광" checked> 태양광</label>
+                        <label><input type="radio" name="energyType" value="풍력"> 풍력</label>
+                        <label><input type="radio" name="energyType" value="수력"> 수력</label>
+                        <label><input type="radio" name="energyType" value="바이오"> 바이오</label>
+                        <label><input type="radio" name="energyType" value="해양"> 해양</label>
+                        <label><input type="radio" name="energyType" value="지열"> 지열</label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">대표 이미지</label>
+                    <div class="form-input-box">
+                        <input type="file" name="imageFile" class="form-input" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="section-title">부지 정보</div>
+
+                <div class="form-row">
+                    <label class="form-label">유휴 부지 면적 <span style="font-size: 0.8rem; color: #888; font-weight: normal;">(선택 항목)</span></label>
+                    <div class="form-input-box">
+                        <div class="radio-group" style="margin-bottom: 10px; padding-top: 0;">
+                            <label><input type="radio" name="landType" value="지붕" checked> 지붕</label>
+                            <label><input type="radio" name="landType" value="나대지"> 나대지</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="number" name="landArea" class="form-input" placeholder="숫자만 입력해주세요">
+                            <span class="unit-text">m²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">생산 지역 <span style="color:red">*</span></label>
+                    <div class="form-input-box">
+                        <div class="input-group">
+                            <input type="text" id="address" name="location" class="form-input" required onclick="execDaumPostcode()" readonly placeholder="주소 검색 클릭">
+                            <button type="button" onclick="execDaumPostcode()" class="btn-green">주소 검색</button>
+                        </div>
+                        <input type="text" name="locationDetail" class="form-input" placeholder="상세주소">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">계약 가능 발전설비 용량 <span style="color:red">*</span></label>
+                    <div class="form-input-box input-group">
+                        <input type="number" name="facilityCapacity" class="form-input" required placeholder="용량을 입력해주세요"
+                               oninput="checkCapacity(this)">
+                        <span class="unit-text">kW</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">희망 계약 유형 <span style="color:red">*</span></label>
+                    <div class="form-input-box">
+                        <div class="radio-group">
+                            <label><input type="checkbox" name="contractTypes" value="REC 구매(현물계약)"> REC 구매(현물계약)</label>
+                            <label><input type="checkbox" name="contractTypes" value="REC 구매(기간계약)"> REC 구매(기간계약)</label>
+                            <label><input type="checkbox" name="contractTypes" value="제3자 PPA"> 제3자 PPA</label>
+                            <label><input type="checkbox" name="contractTypes" value="직접 PPA"> 직접 PPA</label>
+                            <label><input type="checkbox" name="contractTypes" value="VPPA(SMP+REC 고정가격 계약)"> VPPA</label>
+
+                            <div id="contractMsg" style="display: none; color: #dc3545; font-size: 0.9rem; font-weight: bold;">
+                                ⚠ 계약 유형을 최소 하나 이상 선택해주세요.
+                            </div>
+                        </div>
+                        <input type="hidden" name="contractType" id="contractTypeResult">
+                    </div>
+                </div>
+                <div class="section-title">계약 정보 (자동 계산)</div>
+
+                <div class="form-row">
+                    <label class="form-label">계약 단위 <span style="color:red">*</span></label>
+                    <div class="form-input-box radio-group">
+                        <label><input type="radio" name="contractUnit" value="kWh" checked onchange="toggleUnit()"> 발전량(kWh)</label>
+                        <label><input type="radio" name="contractUnit" value="REC" onchange="toggleUnit()"> REC(개)</label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">전력량 <span style="color:red">*</span></label>
+                    <div class="form-input-box" id="volume-box">
+                        <div class="input-group" id="group-kwh">
+                            <input type="number" id="inputKwh" name="volumeKwh" class="form-input" placeholder="전력량을 입력해주세요" required oninput="calcVolume('kWh')">
+                            <span class="unit-text">kWh</span>
+                        </div>
+                        <div class="input-group" id="group-rec">
+                            <input type="number" id="inputRec" name="volumeRec" class="form-input" placeholder="(REC로 자동변환)" readonly oninput="calcVolume('REC')">
+                            <span class="unit-text">REC</span>
+                        </div>
+                        <p class="helper-text">* 1 REC = 1,000 kWh × 가중치 (소수점 올림)</p>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">계약 희망 구매단가 <span style="color:red">*</span></label>
+                    <div class="form-input-box" id="price-box">
+                        <div class="input-group" id="group-price-kwh">
+                            <input type="number" id="priceKwh" name="priceKrw" class="form-input" required placeholder="최저 희망 구매단가를 입력해 주세요." oninput="calcPrice('kWh')">
+                            <span class="unit-text">원/kWh</span>
+                        </div>
+                        <div class="input-group" id="group-price-rec">
+                            <input type="number" id="priceRec" class="form-input" placeholder="(원/REC로 자동변환)" readonly oninput="calcPrice('REC')">
+                            <span class="unit-text">원/REC</span>
+                        </div>
+                        <div class="radio-group">
+                            <label><input type="checkbox" name="isPriceNegotiable"> 협의 가능</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">
+                        가중치 <span style="font-size: 0.8rem; color: #888; font-weight: normal;">(선택 항목)</span>
+                        <div class="tooltip-icon">?
+                            <span class="tooltip-content">가중치에는 0 보다 큰 숫자만 입력 가능하며, 소수점 셋째 자리까지 유효합니다.</span>
+                        </div>
+                    </label>
+                    <div class="form-input-box input-group">
+                        <input type="number" step="0.001" id="weightingFactor" name="weightingFactor" class="form-input" value="1.0"
+                               oninput="checkWeight(this)">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">희망 계약 기간 <span style="color:red">*</span></label>
+                    <div class="form-input-box">
+                        <div class="input-group">
+                            <span style="min-width: 60px;">시작일</span>
+                            <input type="date" name="contractStartDate" class="form-input">
+                        </div>
+                        <div class="input-group">
+                            <span style="min-width: 60px;">종료일</span>
+                            <input type="date" name="contractEndDate" class="form-input">
+                        </div>
+                        <div class="radio-group">
+                            <label><input type="checkbox" name="isPeriodNegotiable"> 협의 가능</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">상세 설명</label>
+                    <div class="form-input-box">
+                        <textarea name="content" class="form-input" rows="5"></textarea>
+                    </div>
+                </div>
+
+                <div style="text-align: right; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                    <a th:href="@{/market/marketpost}" style="padding: 10px 20px; border: 1px solid #ddd; border-radius: 4px; color: #333; text-decoration: none; margin-right: 10px;">취소</a>
+                    <button type="submit" class="btn-green">작성 완료</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<script th:src="@{/market/js/post_form.js}"></script>
+
+</body>
+</html>

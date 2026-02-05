@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside th:fragment="sidebar(activePage)" class="sidebar">
+    <div class="sidebar-title">거래 장터</div>
+    <ul>
+        <li><a th:href="@{/market/marketpost}">🛒 판매자 게시판</a></li>
+        <li><a th:href="@{/market/buyerpost}">🛒 구매자 게시판</a></li>
+    </ul>
+</aside>
+</body>
+</html>
