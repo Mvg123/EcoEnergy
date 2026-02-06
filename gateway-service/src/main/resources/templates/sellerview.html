@@ -143,7 +143,7 @@
 
 <script>
     // [보안관] 로그인 체크
-    fetch('/api/check-login').then(res => { if(res.status === 401) location.href = '/login'; });
+    fetch('/api/check-login').then(res => { if(res.status === 401) location.href = '/adminlogin'; });
 
     const urlParams = new URLSearchParams(window.location.search);
     const seq = urlParams.get('seq');
@@ -155,7 +155,7 @@
             return;
         }
 
-        fetch(`/api/sellers/${seq}`)
+        fetch(`/admin/api/sellers/${seq}`)
             .then(response => response.json())
             .then(data => {
                 document.getElementById('sellComName').textContent = data.sellComName;
@@ -171,10 +171,12 @@
 
                 // [핵심] DB 값(approvalYn)에 따라 체크박스 상태 설정
                 const chk = document.getElementById('approvalChk');
-                if (data.approvalYn === 'Y') {
-                    chk.checked = true;
+
+                // 값이 'Y'라면 checked 속성을 true로 설정
+                if (data.approvYn === 'Y') {
+                    chk.checked = true;  // 체크 표시 됨 ☑️
                 } else {
-                    chk.checked = false;
+                    chk.checked = false; // 체크 해제 됨 ⬜
                 }
             })
             .catch(err => console.error(err));
@@ -191,7 +193,7 @@
             }
 
             // 서버로 변경 요청 전송
-            fetch(`/api/sellers/${seq}/approval`, {
+            fetch(`/admin/api/sellers/${seq}/approval`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ approvalYn: newVal })

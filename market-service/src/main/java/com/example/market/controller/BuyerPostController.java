@@ -120,6 +120,6 @@ public class BuyerPostController {
     @PostMapping("/market/buyer/status/{id}")
     public String updateStatus(@PathVariable Long id, @RequestParam String status) {
         buyerPostService.updateStatus(id, status);
-        return "redirect:/market/buyerpost";
+        return "redirect:/buyer/buyerpost";
     }
 }

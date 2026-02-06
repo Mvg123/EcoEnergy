@@ -55,36 +55,36 @@
 
 <script>
     // [보안관] 로그인 체크
-    fetch('/api/check-login').then(res => { if(res.status === 401) location.href = '/login'; });
+    fetch('/api/check-login').then(res => { if(res.status === 401) location.href = '/adminlogin'; });
 
     document.addEventListener('DOMContentLoaded', function() {
         loadSellerList();
     });
 
     function loadSellerList() {
-        fetch('/api/sellers')
-            .then(response => response.json())
+        fetch('/admin/api/sellers')
+            .then(response => {
+                if (!response.ok) throw new Error('네트워크 응답이 올바르지 않습니다.');
+                return response.json();
+            })
             .then(data => {
                 const tableBody = document.getElementById('seller-list-body');
                 tableBody.innerHTML = '';
 
-                if (data.length === 0) {
+                if (!data || data.length === 0) {
                     tableBody.innerHTML = '<tr><td colspan="6">등록된 판매회원이 없습니다.</td></tr>';
                     return;
                 }
 
-                data.forEach(item => {
-                    // 날짜 포맷팅 (YYYY-MM-DD)
-                    let dateStr = "";
-                    if(item.sellCreatedAt) {
-                        dateStr = item.sellCreatedAt.substring(0, 10);
-                    }
+                data.forEach((item, index) => {
+                    // [수정] 날짜 필드가 없으므로 일단 하이픈(-) 처리
+                    // 만약 User 엔티티에 가입일 필드(createDate 등)를 추가하면 그때 수정하세요.
+                    let dateStr = "-";
 
                     const row = `
                         <tr>
-                            <td>${item.sellSerialNum}</td>
-                            <td style="text-align: left; padding-left: 20px;">
-                                <a href="/sellerview?seq=${item.sellSerialNum}"
+                            <td>${index + 1}</td> <td style="text-align: left; padding-left: 20px;">
+                                <a href="/sellerview?seq=${item.id}"
                                    style="color: #2b5585; font-weight: bold; text-decoration: underline;">
                                     ${item.sellComName}
                                 </a>
@@ -98,7 +98,11 @@
                     tableBody.insertAdjacentHTML('beforeend', row);
                 });
             })
-            .catch(err => console.error(err));
+            .catch(err => {
+                console.error(err);
+                const tableBody = document.getElementById('seller-list-body');
+                tableBody.innerHTML = '<tr><td colspan="6">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
+            });
     }
 </script>
 </body>
