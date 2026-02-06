@@ -19,115 +19,137 @@ public class DataInitializer implements CommandLineRunner {
 
         if (userRepository.count() == 0) {
 
-            // ADMIN
-            String adminSalt = Sha512Util.generateSalt();
-            User admin = new User();
-            admin.setSellComName("관리자회사");
-            admin.setSellRegNum("0000000000");
-            admin.setSellRepName("관리자");
-            admin.setSellComBirth("20010101");
-            admin.setSellComAdr("성남시");
-            admin.setSellComNum("010-0000-9999");
-            admin.setSellBmName("관리자회사담당인");
-            admin.setSellBmNum("00009998");
-            admin.setSellBmDep("인사팀");
-            admin.setSellComId("admin");
-            admin.setSalt(adminSalt);
-            admin.setSellComPw(Sha512Util.hash("admin123", adminSalt));
-            admin.setSellComEmail("admin@example.com");
-            admin.setRole("ADMIN");
-            admin.setCompanyType(CompanyType.BUYER);
-            admin.setApprovYn("Y"); // 관리자는 바로 승인
-            admin.setMarketingCheck("Y");
-            userRepository.save(admin);
-
-            // USER1
+            // USER 1 (BUYER)
             String salt1 = Sha512Util.generateSalt();
             User user1 = new User();
-            user1.setSellComName("유저1회사");
-            user1.setSellRegNum("0000000001");
-            user1.setSellRepName("유저1");
-            user1.setSellComBirth("20010101");
-            user1.setSellComAdr("성남시");
-            user1.setSellComNum("010-1111-2222");
-            user1.setSellBmName("유저1회사담당인");
-            user1.setSellBmNum("010-1111-2221");
-            user1.setSellBmDep("인사팀");
             user1.setSellComId("user1");
+            user1.setSellComPw(Sha512Util.hash("user123", salt1)); // 초기 비밀번호: user123
             user1.setSalt(salt1);
-            user1.setSellComPw(Sha512Util.hash("user123", salt1));
-            user1.setSellComEmail("user1@example.com");
+            user1.setSellComName("에너지구매처1");
+            user1.setSellRegNum("1000000001");
+            user1.setSellRepName("구매자1");
+            user1.setSellComBirth("19900101");
+            user1.setSellComAdr("서울시 강남구");
+            user1.setSellComNum("02-1111-0001");
+            user1.setSellBmName("구매담당1");
+            user1.setSellBmNum("010-1000-0001");
+            user1.setSellBmDep("전략기획팀");
+            user1.setSellComEmail("user1@buyer.com");
             user1.setRole("USER");
             user1.setCompanyType(CompanyType.BUYER);
-            user1.setApprovYn("Y");// 테스트용으로 승인
+            user1.setApprovYn("Y");
             user1.setMarketingCheck("Y");
             userRepository.save(user1);
 
-            // USER2
+// USER 2 (BUYER)
             String salt2 = Sha512Util.generateSalt();
             User user2 = new User();
-            user2.setSellComName("유저2회사");
-            user2.setSellRegNum("0000000002");
-            user2.setSellRepName("유저2");
-            user2.setSellComBirth("20010101");
-            user2.setSellComAdr("성남시");
-            user2.setSellComNum("010-2222-3333");
-            user2.setSellBmName("유저2회사담당인");
-            user2.setSellBmNum("010-2222-3332");
-            user2.setSellBmDep("인사팀");
             user2.setSellComId("user2");
-            user2.setSalt(salt2);
             user2.setSellComPw(Sha512Util.hash("user123", salt2));
-            user2.setSellComEmail("user2@example.com");
+            user2.setSalt(salt2);
+            user2.setSellComName("에너지구매처2");
+            user2.setSellRegNum("1000000002");
+            user2.setSellRepName("구매자2");
+            user2.setSellComBirth("19900202");
+            user2.setSellComAdr("서울시 서초구");
+            user2.setSellComNum("02-1111-0002");
+            user2.setSellBmName("구매담당2");
+            user2.setSellBmNum("010-1000-0002");
+            user2.setSellBmDep("운영지원팀");
+            user2.setSellComEmail("user2@buyer.com");
             user2.setRole("USER");
-            user2.setCompanyType(CompanyType.SELLER);
-            user2.setApprovYn("Y"); // 테스트용으로 승인
+            user2.setCompanyType(CompanyType.BUYER);
+            user2.setApprovYn("Y");
             user2.setMarketingCheck("Y");
             userRepository.save(user2);
 
-            // USER3 (SELLER)
+// USER 3 (BUYER)
             String salt3 = Sha512Util.generateSalt();
             User user3 = new User();
-            user3.setSellComName("유저3회사");
-            user3.setSellRegNum("0000000003");
-            user3.setSellRepName("유저3");
-            user3.setSellComBirth("19990101");
-            user3.setSellComAdr("서울시");
-            user3.setSellComNum("010-3333-4444");
-            user3.setSellBmName("유저3회사담당인");
-            user3.setSellBmNum("010-3333-4443");
-            user3.setSellBmDep("영업팀");
             user3.setSellComId("user3");
-            user3.setSalt(salt3);
             user3.setSellComPw(Sha512Util.hash("user123", salt3));
-            user3.setSellComEmail("user3@example.com");
+            user3.setSalt(salt3);
+            user3.setSellComName("에너지구매처3");
+            user3.setSellRegNum("1000000003");
+            user3.setSellRepName("구매자3");
+            user3.setSellComBirth("19900303");
+            user3.setSellComAdr("서울시 송파구");
+            user3.setSellComNum("02-1111-0003");
+            user3.setSellBmName("구매담당3");
+            user3.setSellBmNum("010-1000-0003");
+            user3.setSellBmDep("자재관리팀");
+            user3.setSellComEmail("user3@buyer.com");
             user3.setRole("USER");
-            user3.setCompanyType(CompanyType.SELLER); // 판매자 설정
+            user3.setCompanyType(CompanyType.BUYER);
             user3.setApprovYn("Y");
             user3.setMarketingCheck("Y");
             userRepository.save(user3);
 
-// USER4 (BUYER)
+            // USER 4 (SELLER)
             String salt4 = Sha512Util.generateSalt();
             User user4 = new User();
-            user4.setSellComName("유저4회사");
-            user4.setSellRegNum("0000000004");
-            user4.setSellRepName("유저4");
-            user4.setSellComBirth("19950505");
-            user4.setSellComAdr("부산시");
-            user4.setSellComNum("010-4444-5555");
-            user4.setSellBmName("유저4회사담당인");
-            user4.setSellBmNum("010-4444-5554");
-            user4.setSellBmDep("구매팀");
             user4.setSellComId("user4");
-            user4.setSalt(salt4);
             user4.setSellComPw(Sha512Util.hash("user123", salt4));
-            user4.setSellComEmail("user4@example.com");
+            user4.setSalt(salt4);
+            user4.setSellComName("태양광발전소4");
+            user4.setSellRegNum("2000000004");
+            user4.setSellRepName("판매자4");
+            user4.setSellComBirth("19850404");
+            user4.setSellComAdr("경기도 수원시");
+            user4.setSellComNum("031-444-0004");
+            user4.setSellBmName("판매담당4");
+            user4.setSellBmNum("010-2000-0004");
+            user4.setSellBmDep("기술지원팀");
+            user4.setSellComEmail("user4@seller.com");
             user4.setRole("USER");
-            user4.setCompanyType(CompanyType.BUYER); // 구매자 설정
+            user4.setCompanyType(CompanyType.SELLER);
             user4.setApprovYn("Y");
             user4.setMarketingCheck("Y");
             userRepository.save(user4);
+
+// USER 5 (SELLER)
+            String salt5 = Sha512Util.generateSalt();
+            User user5 = new User();
+            user5.setSellComId("user5");
+            user5.setSellComPw(Sha512Util.hash("user123", salt5));
+            user5.setSalt(salt5);
+            user5.setSellComName("풍력발전소5");
+            user5.setSellRegNum("2000000005");
+            user5.setSellRepName("판매자5");
+            user5.setSellComBirth("19850505");
+            user5.setSellComAdr("강원도 춘천시");
+            user5.setSellComNum("033-555-0005");
+            user5.setSellBmName("판매담당5");
+            user5.setSellBmNum("010-2000-0005");
+            user5.setSellBmDep("발전운영팀");
+            user5.setSellComEmail("user5@seller.com");
+            user5.setRole("USER");
+            user5.setCompanyType(CompanyType.SELLER);
+            user5.setApprovYn("Y");
+            user5.setMarketingCheck("Y");
+            userRepository.save(user5);
+
+// USER 6 (SELLER)
+            String salt6 = Sha512Util.generateSalt();
+            User user6 = new User();
+            user6.setSellComId("user6");
+            user6.setSellComPw(Sha512Util.hash("user123", salt6));
+            user6.setSalt(salt6);
+            user6.setSellComName("바이오에너지6");
+            user6.setSellRegNum("2000000006");
+            user6.setSellRepName("판매자6");
+            user6.setSellComBirth("19850606");
+            user6.setSellComAdr("충청남도 천안시");
+            user6.setSellComNum("041-666-0006");
+            user6.setSellBmName("판매담당6");
+            user6.setSellBmNum("010-2000-0006");
+            user6.setSellBmDep("에너지사업부");
+            user6.setSellComEmail("user6@seller.com");
+            user6.setRole("USER");
+            user6.setCompanyType(CompanyType.SELLER);
+            user6.setApprovYn("Y");
+            user6.setMarketingCheck("Y");
+            userRepository.save(user6);
         }
     }
 }

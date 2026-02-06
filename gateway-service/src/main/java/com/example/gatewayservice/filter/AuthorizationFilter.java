@@ -114,6 +114,13 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
         return path.startsWith("/login") || path.startsWith("/register") ||
                 path.startsWith("/css") || path.startsWith("/js") ||
                 path.startsWith("/images") || path.startsWith("/h2-console") ||
-                path.startsWith("/api/auth") || path.equals("/favicon.ico");
+                path.startsWith("/api/auth") || path.equals("/favicon.ico") ||
+                path.startsWith("/api/login")||
+                path.startsWith("/api/check-login")||
+                path.startsWith("/api/logout")||
+                path.startsWith("/admin/api/buyers")||
+                path.startsWith("/admin/api/sellers")||
+                path.startsWith("/api/admins");
+
     }
 }

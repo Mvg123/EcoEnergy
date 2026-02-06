@@ -41,6 +41,13 @@ public class AuthService {
                 throw new IllegalStateException("관리자 승인이 필요한 계정입니다.");
             }
 
+            // 2. 승인 대기 확인 (판매자인 경우만)
+            // (만약 DB에 company_type이 "1" 또는 "SELLER"로 저장되어 있다면 그 값에 맞춰 수정)
+            if (("1".equals(userType) || "BUYER".equals(userType)) && !"Y".equals(user.getApprovYn())) {
+                throw new IllegalStateException("관리자 승인이 필요한 계정입니다.");
+            }
+
+
             // 3. 비밀번호 검증
             String hashed = Sha512Util.hash(request.getSellComPw(), user.getSalt());
             if (!hashed.equals(user.getSellComPw())) {
