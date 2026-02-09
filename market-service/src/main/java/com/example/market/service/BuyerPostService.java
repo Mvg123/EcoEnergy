@@ -62,6 +62,8 @@ public class BuyerPostService {
                 .orElseThrow(() -> new IllegalArgumentException("회원 찾을 수 없음: " + userId));
         Long buyerId = member.getId();
 
+        if (dto.getLandArea() == null) dto.setLandArea(0.0);
+
         // Entity 생성 (이미지 인자 없이 호출)
         BuyerPost buyerPost = dto.toEntity(buyerId);
         buyerPostRepository.save(buyerPost);

@@ -78,6 +78,8 @@ public class MarketPostService {
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다. ID: " + userId));
         Long realWriterId = member.getId(); // 진짜 PK값
 
+        if (dto.getLandArea() == null) dto.setLandArea(0.0);
+
         // 찾아낸 숫자 ID로 게시글 저장
         MarketPost marketPost = dto.toEntity(realWriterId);
         MarketPost savedPost = marketPostRepository.save(marketPost);
